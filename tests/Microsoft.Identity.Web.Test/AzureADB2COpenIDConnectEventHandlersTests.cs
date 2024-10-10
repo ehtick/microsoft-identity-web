@@ -33,7 +33,7 @@ namespace Microsoft.Identity.Web.Test
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task OnRedirectToIdentityProvider_CustomUserFlow_UpdatesContext(bool hasClientCredentials)
+        public async Task OnRedirectToIdentityProvider_CustomUserFlow_UpdatesContextAsync(bool hasClientCredentials)
         {
             var errorAccessor = Substitute.For<ILoginErrorAccessor>();
             var options = new MicrosoftIdentityOptions() { SignUpSignInPolicyId = DefaultUserFlow };
@@ -55,7 +55,7 @@ namespace Microsoft.Identity.Web.Test
                 },
             };
 
-            await handler.OnRedirectToIdentityProvider(context).ConfigureAwait(false);
+            await handler.OnRedirectToIdentityProvider(context);
 
             errorAccessor.DidNotReceive().SetMessage(httpContext, Arg.Any<string>());
             Assert.Equal(TestConstants.Scopes, context.ProtocolMessage.Scope);
@@ -72,7 +72,7 @@ namespace Microsoft.Identity.Web.Test
         }
 
         [Fact]
-        public async Task OnRedirectToIdentityProvider_DefaultUserFlow_DoesntUpdateContext()
+        public async Task OnRedirectToIdentityProvider_DefaultUserFlow_DoesntUpdateContextAsync()
         {
             var errorAccessor = Substitute.For<ILoginErrorAccessor>();
             var options = new MicrosoftIdentityOptions() { SignUpSignInPolicyId = DefaultUserFlow };
@@ -82,7 +82,7 @@ namespace Microsoft.Identity.Web.Test
             authProperties.Items.Add(OidcConstants.PolicyKey, DefaultUserFlow);
             var context = new RedirectContext(httpContext, _authScheme, new OpenIdConnectOptions(), authProperties) { ProtocolMessage = new OpenIdConnectMessage() { IssuerAddress = _defaultIssuer } };
 
-            await handler.OnRedirectToIdentityProvider(context).ConfigureAwait(false);
+            await handler.OnRedirectToIdentityProvider(context);
 
             errorAccessor.DidNotReceive().SetMessage(httpContext, Arg.Any<string>());
             Assert.Null(context.ProtocolMessage.Scope);
@@ -92,7 +92,7 @@ namespace Microsoft.Identity.Web.Test
         }
 
         [Fact]
-        public async Task OnRemoteFailure_PasswordReset_RedirectsSuccessfully()
+        public async Task OnRemoteFailure_PasswordReset_RedirectsSuccessfullyAsync()
         {
             var errorAccessor = Substitute.For<ILoginErrorAccessor>();
             var httpContext = Substitute.For<HttpContext>();
@@ -101,14 +101,14 @@ namespace Microsoft.Identity.Web.Test
 
             var passwordResetException = "'access_denied', error_description: 'AADB2C90118: The user has forgotten their password. Correlation ID: f99deff4-f43b-43cc-b4e7-36141dbaf0a0 Timestamp: 2018-03-05 02:49:35Z', error_uri: 'error_uri is null'";
 
-            await handler.OnRemoteFailure(new RemoteFailureContext(httpContext, _authScheme, new OpenIdConnectOptions(), new OpenIdConnectProtocolException(passwordResetException))).ConfigureAwait(false);
+            await handler.OnRemoteFailure(new RemoteFailureContext(httpContext, _authScheme, new OpenIdConnectOptions(), new OpenIdConnectProtocolException(passwordResetException)));
 
             errorAccessor.DidNotReceive().SetMessage(httpContext, Arg.Any<string>());
             httpContext.Response.Received().Redirect($"{httpContext.Request.PathBase}/MicrosoftIdentity/Account/ResetPassword/{OpenIdConnectDefaults.AuthenticationScheme}");
         }
 
         [Fact]
-        public async Task OnRemoteFailure_Cancel_RedirectsSuccessfully()
+        public async Task OnRemoteFailure_Cancel_RedirectsSuccessfullyAsync()
         {
             var errorAccessor = Substitute.For<ILoginErrorAccessor>();
             var httpContext = Substitute.For<HttpContext>();
@@ -122,7 +122,7 @@ namespace Microsoft.Identity.Web.Test
                     httpContext,
                     _authScheme,
                     new OpenIdConnectOptions(),
-                    new OpenIdConnectProtocolException(cancelException))).ConfigureAwait(false);
+                    new OpenIdConnectProtocolException(cancelException)));
 
             errorAccessor.DidNotReceive().SetMessage(httpContext, Arg.Any<string>());
 
@@ -130,7 +130,7 @@ namespace Microsoft.Identity.Web.Test
         }
 
         [Fact]
-        public async Task OnRemoteFailure_OtherException_RedirectsSuccessfully()
+        public async Task OnRemoteFailure_OtherException_RedirectsSuccessfullyAsync()
         {
             var errorAccessor = Substitute.For<ILoginErrorAccessor>();
             var httpContext = Substitute.For<HttpContext>();
@@ -144,7 +144,7 @@ namespace Microsoft.Identity.Web.Test
                     httpContext,
                     _authScheme,
                     new OpenIdConnectOptions(),
-                    new OpenIdConnectProtocolException(otherException))).ConfigureAwait(false);
+                    new OpenIdConnectProtocolException(otherException)));
 
             errorAccessor.Received(1).SetMessage(httpContext, otherException);
             httpContext.Response.Received().Redirect($"{httpContext.Request.PathBase}/MicrosoftIdentity/Account/Error");

@@ -49,10 +49,10 @@ namespace Microsoft.Identity.Web.Test.Integration
             // Arrange
             HttpClient client = CreateHttpClient(addInMemoryTokenCache);
 
-            var result = await AcquireTokenForLabUserAsync().ConfigureAwait(false);
+            var result = await AcquireTokenForLabUserAsync();
 
             // Act
-            HttpResponseMessage response = await CreateHttpResponseMessage(webApiUrl, client, result).ConfigureAwait(false);
+            HttpResponseMessage response = await CreateHttpResponseMessageAsync(webApiUrl, client, result);
 
             // Assert
             Assert.True(response.IsSuccessStatusCode);
@@ -78,10 +78,10 @@ namespace Microsoft.Identity.Web.Test.Integration
             // Arrange
             HttpClient client = CreateHttpClient(addInMemoryTokenCache);
 
-            var result = await AcquireTokenForLabUserAsync().ConfigureAwait(false);
+            var result = await AcquireTokenForLabUserAsync();
 
             // Act
-            HttpResponseMessage response = await CreateHttpResponseMessage(webApiUrl, client, result).ConfigureAwait(false);
+            HttpResponseMessage response = await CreateHttpResponseMessageAsync(webApiUrl, client, result);
 
             // Assert
             Assert.True(response.IsSuccessStatusCode);
@@ -89,7 +89,7 @@ namespace Microsoft.Identity.Web.Test.Integration
 
 #if NET7_0
         [Fact]
-        public async Task TestSigningKeyIssuer()
+        public async Task TestSigningKeyIssuerAsync()
         {
             // Arrange
             string authority = "http://localhost:1234";
@@ -119,11 +119,11 @@ namespace Microsoft.Identity.Web.Test.Integration
               );
 
                 // Act
-                var result = await AcquireTokenForLabUserAsync().ConfigureAwait(false);
-                HttpResponseMessage response = await CreateHttpResponseMessage(
+                var result = await AcquireTokenForLabUserAsync();
+                HttpResponseMessage response = await CreateHttpResponseMessageAsync(
                     TestConstants.SecurePage2GetTokenForUserAsync,
                     client,
-                    result).ConfigureAwait(false);
+                    result);
                 p.Kill();
 
                 // Assert
@@ -138,7 +138,7 @@ namespace Microsoft.Identity.Web.Test.Integration
 #endif
 
 
-        private static async Task<HttpResponseMessage> CreateHttpResponseMessage(string webApiUrl, HttpClient client, AuthenticationResult result)
+        private static async Task<HttpResponseMessage> CreateHttpResponseMessageAsync(string webApiUrl, HttpClient client, AuthenticationResult result)
         {
             HttpResponseMessage response;
             using (HttpRequestMessage httpRequestMessage = new HttpRequestMessage(
@@ -154,7 +154,7 @@ namespace Microsoft.Identity.Web.Test.Integration
                             Constants.Bearer,
                             result.AccessToken));
                 }
-                response = await client.SendAsync(httpRequestMessage).ConfigureAwait(false);
+                response = await client.SendAsync(httpRequestMessage);
             }
 
             return response;
@@ -194,7 +194,7 @@ namespace Microsoft.Identity.Web.Test.Integration
 
         private static async Task<AuthenticationResult> AcquireTokenForLabUserAsync()
         {
-            var labResponse = await LabUserHelper.GetSpecificUserAsync(TestConstants.OBOUser).ConfigureAwait(false);
+            var labResponse = await LabUserHelper.GetSpecificUserAsync(TestConstants.OBOUser);
             var msalPublicClient = PublicClientApplicationBuilder
                .Create(TestConstants.OBOClientSideClientId)
                .WithAuthority(labResponse.Lab.Authority, TestConstants.Organizations)
@@ -206,7 +206,7 @@ namespace Microsoft.Identity.Web.Test.Integration
                 TestConstants.OBOUser,
                 labResponse.User.GetOrFetchPassword())
                 .ExecuteAsync(CancellationToken.None)
-                .ConfigureAwait(false);
+                ;
 
             return authResult;
         }

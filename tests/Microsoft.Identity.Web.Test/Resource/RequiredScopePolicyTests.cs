@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web.Resource;
 using Microsoft.Identity.Web.Test.Common;
 using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Microsoft.Identity.Web.Test.Resource
@@ -31,7 +32,7 @@ namespace Microsoft.Identity.Web.Test.Resource
         [InlineData(PolicyName, ClaimConstants.Scope)]
         [InlineData(PolicyName, ClaimConstants.Scope, true)]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-        public async void VerifyUserHasAnyAcceptedScope_TestAsync(
+        public async Task VerifyUserHasAnyAcceptedScope_TestAsync(
             string policyName,
             string claimType,
             bool withConfig = false)
@@ -46,7 +47,7 @@ namespace Microsoft.Identity.Web.Test.Resource
                 new CaseSensitiveClaimsIdentity(new Claim[] { new Claim(claimType, SingleScope) }));
 
             // Act
-            var allowed = await authorizationService.AuthorizeAsync(user, policyName).ConfigureAwait(false);
+            var allowed = await authorizationService.AuthorizeAsync(user, policyName);
 
             // Assert
             Assert.True(allowed.Succeeded);
@@ -57,7 +58,7 @@ namespace Microsoft.Identity.Web.Test.Resource
         [InlineData(PolicyName, SingleScope, ClaimConstants.Scp, true)]
         [InlineData(PolicyName, SingleScope, ClaimConstants.Scope)]
         [InlineData(PolicyName, SingleScope, ClaimConstants.Scope, true)]
-        public async void VerifyUserHasAnyAcceptedScope_OneScopeMatches_TestAsync(
+        public async Task VerifyUserHasAnyAcceptedScope_OneScopeMatches_TestAsync(
             string policyName,
             string scopes,
             string claimType,
@@ -73,14 +74,14 @@ namespace Microsoft.Identity.Web.Test.Resource
                 new CaseSensitiveClaimsIdentity(new Claim[] { new Claim(claimType, MultipleScopes) }));
 
             // Act
-            var allowed = await authorizationService.AuthorizeAsync(user, policyName).ConfigureAwait(false);
+            var allowed = await authorizationService.AuthorizeAsync(user, policyName);
 
             // Assert
             Assert.True(allowed.Succeeded);
         }
 
         [Fact]
-        public async void VerifyUserHasAnyAcceptedScope_WithMismatchScopeTest_FailsAsync()
+        public async Task VerifyUserHasAnyAcceptedScope_WithMismatchScopeTest_FailsAsync()
         {
             // Arrange
             var authorizationService = BuildAuthorizationService(
@@ -91,14 +92,14 @@ namespace Microsoft.Identity.Web.Test.Resource
                 new CaseSensitiveClaimsIdentity(new Claim[] { new Claim(ClaimConstants.Scp, UserRead) }));
 
             // Act
-            var allowed = await authorizationService.AuthorizeAsync(user, PolicyName).ConfigureAwait(false);
+            var allowed = await authorizationService.AuthorizeAsync(user, PolicyName);
 
             // Assert
             Assert.False(allowed.Succeeded);
         }
 
         [Fact]
-        public async void VerifyUserHasAnyAcceptedScope_RequiredScopesMissingAsync()
+        public async Task VerifyUserHasAnyAcceptedScope_RequiredScopesMissingAsync()
         {
             // Arrange
             var authorizationService = BuildAuthorizationService(
@@ -109,14 +110,14 @@ namespace Microsoft.Identity.Web.Test.Resource
                 new CaseSensitiveClaimsIdentity(new Claim[] { new Claim(ClaimConstants.Scp, UserRead) }));
 
             // Act
-            var allowed = await authorizationService.AuthorizeAsync(user, PolicyName).ConfigureAwait(false);
+            var allowed = await authorizationService.AuthorizeAsync(user, PolicyName);
 
             // Assert
             Assert.True(allowed.Succeeded);
         }
 
         [Fact]
-        public async void IncorrectPolicyName_FailsAsync()
+        public async Task IncorrectPolicyName_FailsAsync()
         {
             // Arrange
             var authorizationService = BuildAuthorizationService(
@@ -127,7 +128,7 @@ namespace Microsoft.Identity.Web.Test.Resource
                 new CaseSensitiveClaimsIdentity(new Claim[] { new Claim(ClaimConstants.Scp, SingleScope) }));
 
             // Act & Assert
-            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => authorizationService.AuthorizeAsync(user, PolicyName)).ConfigureAwait(false);
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => authorizationService.AuthorizeAsync(user, PolicyName));
             Assert.Equal("No policy found: foo.", exception.Message);
         }
 

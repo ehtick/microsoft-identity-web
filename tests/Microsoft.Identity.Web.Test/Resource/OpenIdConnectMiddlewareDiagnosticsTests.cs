@@ -49,101 +49,101 @@ namespace Microsoft.Identity.Web.Test.Resource
         }
 
         [Fact]
-        public async void Subscribe_OnRedirectToIdentityProvider_CompletesSuccessfully()
+        public async Task Subscribe_OnRedirectToIdentityProvider_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnRedirectToIdentityProvider = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.RedirectToIdentityProvider(new RedirectContext(_httpContext, _authScheme, _openIdOptions, _authProperties) { ProtocolMessage = new OpenIdConnectMessage() }).ConfigureAwait(false);
+            await _openIdEvents.RedirectToIdentityProvider(new RedirectContext(_httpContext, _authScheme, _openIdOptions, _authProperties) { ProtocolMessage = new OpenIdConnectMessage() });
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnMessageReceived_CompletesSuccessfully()
+        public async Task Subscribe_OnMessageReceived_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnMessageReceived = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.MessageReceived(new MessageReceivedContext(_httpContext, _authScheme, _openIdOptions, _authProperties) { ProtocolMessage = new OpenIdConnectMessage() }).ConfigureAwait(false);
+            await _openIdEvents.MessageReceived(new MessageReceivedContext(_httpContext, _authScheme, _openIdOptions, _authProperties) { ProtocolMessage = new OpenIdConnectMessage() });
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnAuthorizationCodeReceived_CompletesSuccessfully()
+        public async Task Subscribe_OnAuthorizationCodeReceived_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnAuthorizationCodeReceived = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.AuthorizationCodeReceived(new AuthorizationCodeReceivedContext(_httpContext, _authScheme, _openIdOptions, _authProperties)).ConfigureAwait(false);
+            await _openIdEvents.AuthorizationCodeReceived(new AuthorizationCodeReceivedContext(_httpContext, _authScheme, _openIdOptions, _authProperties));
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnTokenResponseReceived_CompletesSuccessfully()
+        public async Task Subscribe_OnTokenResponseReceived_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnTokenResponseReceived = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.TokenResponseReceived(new TokenResponseReceivedContext(_httpContext, _authScheme, _openIdOptions, _httpContext.User, _authProperties)).ConfigureAwait(false);
+            await _openIdEvents.TokenResponseReceived(new TokenResponseReceivedContext(_httpContext, _authScheme, _openIdOptions, _httpContext.User, _authProperties));
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnTokenValidated_CompletesSuccessfully()
+        public async Task Subscribe_OnTokenValidated_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnTokenValidated = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.TokenValidated(new TokenValidatedContext(_httpContext, _authScheme, _openIdOptions, _httpContext.User, _authProperties)).ConfigureAwait(false);
+            await _openIdEvents.TokenValidated(new TokenValidatedContext(_httpContext, _authScheme, _openIdOptions, _httpContext.User, _authProperties));
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnUserInformationReceived_CompletesSuccessfully()
+        public async Task Subscribe_OnUserInformationReceived_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnUserInformationReceived = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.UserInformationReceived(new UserInformationReceivedContext(_httpContext, _authScheme, _openIdOptions, _httpContext.User, _authProperties)).ConfigureAwait(false);
+            await _openIdEvents.UserInformationReceived(new UserInformationReceivedContext(_httpContext, _authScheme, _openIdOptions, _httpContext.User, _authProperties));
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnAuthenticationFailed_CompletesSuccessfully()
+        public async Task Subscribe_OnAuthenticationFailed_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnAuthenticationFailed = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.AuthenticationFailed(new AuthenticationFailedContext(_httpContext, _authScheme, _openIdOptions)).ConfigureAwait(false);
+            await _openIdEvents.AuthenticationFailed(new AuthenticationFailedContext(_httpContext, _authScheme, _openIdOptions));
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnRemoteSignOut_CompletesSuccessfully()
+        public async Task Subscribe_OnRemoteSignOut_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnRemoteSignOut = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.RemoteSignOut(new RemoteSignOutContext(_httpContext, _authScheme, _openIdOptions, new OpenIdConnectMessage())).ConfigureAwait(false);
+            await _openIdEvents.RemoteSignOut(new RemoteSignOutContext(_httpContext, _authScheme, _openIdOptions, new OpenIdConnectMessage()));
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnRedirectToIdentityProviderForSignOut_CompletesSuccessfully()
+        public async Task Subscribe_OnRedirectToIdentityProviderForSignOut_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnRedirectToIdentityProviderForSignOut = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.RedirectToIdentityProviderForSignOut(new RedirectContext(_httpContext, _authScheme, _openIdOptions, _authProperties)).ConfigureAwait(false);
+            await _openIdEvents.RedirectToIdentityProviderForSignOut(new RedirectContext(_httpContext, _authScheme, _openIdOptions, _authProperties));
 
             AssertSuccess();
         }
 
         [Fact]
-        public async void Subscribe_OnSignedOutCallbackRedirect_CompletesSuccessfully()
+        public async Task Subscribe_OnSignedOutCallbackRedirect_CompletesSuccessfullyAsync()
         {
             _openIdEvents.OnSignedOutCallbackRedirect = _eventHandler;
             _openIdDiagnostics.Subscribe(_openIdEvents);
-            await _openIdEvents.SignedOutCallbackRedirect(new RemoteSignOutContext(_httpContext, _authScheme, _openIdOptions, new OpenIdConnectMessage())).ConfigureAwait(false);
+            await _openIdEvents.SignedOutCallbackRedirect(new RemoteSignOutContext(_httpContext, _authScheme, _openIdOptions, new OpenIdConnectMessage()));
 
             AssertSuccess();
         }

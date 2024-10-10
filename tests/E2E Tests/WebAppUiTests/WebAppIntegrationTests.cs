@@ -28,14 +28,14 @@ namespace WebAppUiTests
             IBrowser browser = await playwright.Chromium.LaunchAsync(new() { Headless = true });
             IPage page = await browser.NewPageAsync();
             await page.GotoAsync(UrlString);
-            LabResponse labResponse = await LabUserHelper.GetDefaultUserAsync().ConfigureAwait(false);
+            LabResponse labResponse = await LabUserHelper.GetDefaultUserAsync();
 
             try
             {
                 // Act
                 Trace.WriteLine("Starting Playwright automation: web app sign-in & call Graph");
                 string email = labResponse.User.Upn;
-                await UiTestHelpers.FirstLogin_MicrosoftIdFlow_ValidEmailPassword(page, email, labResponse.User.GetOrFetchPassword());
+                await UiTestHelpers.FirstLogin_MicrosoftIdFlow_ValidEmailPasswordAsync(page, email, labResponse.User.GetOrFetchPassword());
 
                 // Assert
                 await Assertions.Expect(page.GetByText("Welcome")).ToBeVisibleAsync();

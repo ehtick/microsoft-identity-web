@@ -61,7 +61,7 @@ namespace Microsoft.Identity.Web.Test
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
-        public async Task MicrosoftIdentityAuthenticationMessageHandler_Adds_AuthorizationHeader(bool useApp)
+        public async Task MicrosoftIdentityAuthenticationMessageHandler_Adds_AuthorizationHeaderAsync(bool useApp)
         {
             // arrange
             var tokenAcquisition = Substitute.For<ITokenAcquisition>();
@@ -98,7 +98,7 @@ namespace Microsoft.Identity.Web.Test
             using var request = new HttpRequestMessage(HttpMethod.Get, TestConstants.GraphBaseUrlBeta);
 
             // act
-            var response = await client.SendAsync(request).ConfigureAwait(false);
+            var response = await client.SendAsync(request);
 
             // assert
             if (useApp)
@@ -108,7 +108,7 @@ namespace Microsoft.Identity.Web.Test
                     _handlerOptions.AuthenticationScheme,
                     _handlerOptions.Tenant,
                     Arg.Any<TokenAcquisitionOptions>() /* options are cloned */)
-                    .ConfigureAwait(false);
+                    ;
             }
             else
             {
@@ -118,7 +118,7 @@ namespace Microsoft.Identity.Web.Test
                     tenantId: _handlerOptions.Tenant,
                     userFlow: _handlerOptions.UserFlow,
                     tokenAcquisitionOptions: Arg.Any<TokenAcquisitionOptions>() /* options are cloned */)
-                    .ConfigureAwait(false);
+                    ;
             }
 
             Assert.True(_mockedMessageHandler.Requests[0].Headers.Contains(Constants.Authorization));
@@ -128,7 +128,7 @@ namespace Microsoft.Identity.Web.Test
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
-        public async Task MicrosoftIdentityAuthenticationMessageHandler_Replaces_AuthorizationHeader(bool useApp)
+        public async Task MicrosoftIdentityAuthenticationMessageHandler_Replaces_AuthorizationHeaderAsync(bool useApp)
         {
             // arrange
             var tokenAcquisition = Substitute.For<ITokenAcquisition>();
@@ -166,7 +166,7 @@ namespace Microsoft.Identity.Web.Test
             request.Headers.Add(Constants.Authorization, "auth");
 
             // act
-            var response = await client.SendAsync(request).ConfigureAwait(false);
+            var response = await client.SendAsync(request);
 
             // assert
             Assert.True(_mockedMessageHandler.Requests[0].Headers.Contains(Constants.Authorization));
